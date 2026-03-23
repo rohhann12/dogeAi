@@ -1,0 +1,12 @@
+node_modules/
+.env
+# Don't ignore o2c.db — needed for deployment
+*.db
+!backend/data/o2c.db
+dist/
+.DS_Store
+/data/sap-o2c-data/
+backend/data/o2c.db-shm
+backend/data/o2c.db-wal
+backend/.claude/
+frontend-tradeoffs-content.md
