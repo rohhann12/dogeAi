@@ -4,19 +4,19 @@ import { Link } from "react-router-dom";
 const sections = [
   {
     title: "Why Not Neo4j?",
-    content: `Neo4j is the default choice when someone says "graph" — but defaults aren't always right. Our dataset has ~21,000 records across 19 tables with well-defined foreign key relationships. At this scale, Neo4j introduces operational complexity (Docker, authentication, Cypher query language, separate server process) without any performance benefit. SQLite handles our entire dataset in a single 2MB file, queries execute in under 1ms, and deployment means copying one file. More importantly, LLMs are significantly better at generating SQL than Cypher — years of training data on SQL means higher accuracy on first-try query generation, which directly impacts the user experience. The "graph" in our system is a visualization concern, not a storage concern. We construct the graph JSON from relational joins at build time and serve it as a static asset. The data lives in SQLite where it's most queryable; the graph lives in the browser where it's most visual.`,
+    content: `21K rows in 19 tables with clear foreign keys — SQLite handles this in a 2MB file with sub-millisecond queries. Neo4j adds Docker, Cypher, and a separate server for zero performance gain. LLMs generate far better SQL than Cypher, so we get more accurate queries out of the box.`,
   },
   {
     title: "Why Not Vector Embeddings?",
-    content: `Vectorization solves semantic similarity search — "find me documents similar to X." Our queries are analytical: "which products have the most billing documents," "trace the flow of billing document 91150187," "find orders that were delivered but not billed." These are aggregations, joins, and filters — exactly what SQL was built for. Embedding 21,000 structured records into a vector space and then doing approximate nearest-neighbor search would be slower, less accurate, and fundamentally the wrong abstraction. You'd convert precise relational queries into fuzzy similarity matches. The only scenario where vectors would help is if we had thousands of free-text product descriptions and needed fuzzy search — we have 69 products with clean structured fields. Every query in this system maps to a deterministic SQL statement, not a similarity score.`,
+    content: `Our queries are aggregations, joins, and filters — not similarity searches. Vectorizing structured data to do approximate nearest-neighbor lookups is the wrong abstraction when every question maps cleanly to a deterministic SQL statement.`,
   },
   {
     title: "Why Natural Language → SQL?",
-    content: `The pipeline is simple: user asks a question → Gemini generates a SQL SELECT → we validate and execute it → Gemini formats the result as natural language. This works because: (1) the schema is small enough to fit entirely in the LLM's context window, (2) SQL is the most well-represented query language in LLM training data, (3) we can deterministically validate the output before execution (parse the AST, whitelist tables, enforce SELECT-only), and (4) the results are always grounded in real data — the LLM never makes up numbers, it only describes what the query returned.`,
+    content: `The schema fits in the LLM context window, SQL is the best-represented query language in training data, and we can validate the output deterministically before execution. The LLM never makes up numbers — it only describes what the query returned.`,
   },
   {
     title: "4-Layer Guardrail System",
-    content: `A system prompt alone isn't sufficient to prevent off-topic responses. We use four layers of defense: Layer 1 — Gemini function calling forces the LLM to choose between query_database(sql) and reject_query(reason), structurally preventing free-form answers. Layer 2 — Deterministic SQL validation parses the AST, enforces SELECT-only, whitelists tables, and requires a FROM clause (catching tricks like SELECT 'Paris'). Layer 3 — Read-only SQLite execution with a physically immutable database connection. Layer 4 — Response formatting only receives query results, not world knowledge. Even if Layer 1 is fooled, Layers 2-3 are pure code that can't be prompt-injected.`,
+    content: `Function calling forces the LLM to pick query_database() or reject_query() — no free-form answers. SQL AST validation whitelists tables and enforces SELECT-only. Read-only SQLite makes mutation physically impossible. Even if Layer 1 is fooled, Layers 2–3 are pure code that can't be prompt-injected.`,
   },
 ];
 
