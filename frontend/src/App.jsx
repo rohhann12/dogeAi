@@ -30,7 +30,7 @@ function MainView() {
   }, []);
 
   return (
-    <div className="flex h-screen w-screen flex-col bg-zinc-950 text-zinc-100">
+    <div className="flex h-screen w-screen flex-col overflow-hidden bg-zinc-950 text-zinc-100">
       {/* Header */}
       <header className="flex h-12 shrink-0 items-center justify-between border-b border-zinc-800 bg-zinc-900 px-5">
         <div className="flex items-center">
