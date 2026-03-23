@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import GraphView from "./components/GraphView";
 import ChatPanel from "./components/ChatPanel";
 import Tradeoffs from "./pages/Tradeoffs";
-import { ChevronRight, FileText } from "lucide-react";
+import Workflow from "./pages/Workflow";
+import { ChevronRight, FileText, GitBranch } from "lucide-react";
 
 function MainView() {
   const [graphData, setGraphData] = useState({ nodes: [], links: [] });
@@ -39,13 +40,22 @@ function MainView() {
             Order to Cash
           </span>
         </div>
-        <Link
-          to="/tradeoffs"
-          className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
-        >
-          <FileText className="h-3.5 w-3.5" />
-          Architecture Tradeoffs
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            to="/workflow"
+            className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            <GitBranch className="h-3.5 w-3.5" />
+            Dev Workflow
+          </Link>
+          <Link
+            to="/tradeoffs"
+            className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            <FileText className="h-3.5 w-3.5" />
+            Architecture Tradeoffs
+          </Link>
+        </div>
       </header>
 
       {/* Main content */}
@@ -76,6 +86,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainView />} />
         <Route path="/tradeoffs" element={<Tradeoffs />} />
+        <Route path="/workflow" element={<Workflow />} />
       </Routes>
     </BrowserRouter>
   );
